@@ -7,38 +7,25 @@ server:
   #key-store-password:
 logging:
   level:
-    root: info
-    org.spring.framework:
-      security: trace
-      web: trace
-      hibernate: trace
+    root: debug
+    org:
+      spring:
+        framework:
+            security: debug
+            web: debug
+            hibernate: debug
   file:
     name: taco_cloud.log
 spring:
-  profiles:
-    active:
-    - prod
-    #- debug
-  h2:
-    console:
-      enabled: true
-  thymeleaf:
-    cache: false
   datasource:
-    # url: jdbc:h2:mem:taco_cloud
     url: jdbc:mysql://localhost:3306/taco_cloud
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
-      #sql:
-      #init:
-      #mode: always
-    #schema-locations: classpath:schema.sql
-    #data-locations: classpath:data.sql
   jpa:
-    database: h2
     open-in-view: false
     generate-ddl: false
+    database: mysql
 #custom config props...
 taco:
   security:
