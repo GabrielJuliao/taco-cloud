@@ -1,5 +1,8 @@
 package com.gabrieljuliao.tacocloud;
 
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,14 +16,17 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
+@Setter
+@RequiredArgsConstructor
+@ConfigurationProperties(prefix = "taco.security")
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final DataSource dataSource;
     private final UserDetailsService userDetailsService;
+    //injected by config props
+    private String usersQuery;
+    //injected by config props
+    private String authoritiesQuery;
 
-    public SecurityConfiguration(DataSource dataSource, UserDetailsService userDetailsService) {
-        this.dataSource = dataSource;
-        this.userDetailsService = userDetailsService;
-    }
 
     @Bean
     public BCryptPasswordEncoder encoder() {
@@ -31,12 +37,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // auth.inMemoryAuthentication().withUser("username").password(encoder().encode("password")).authorities("USER");
         auth.jdbcAuthentication().dataSource(dataSource)
-                .usersByUsernameQuery(
-                        "select username, password, enabled from users where username=?"
-                )
-                .authoritiesByUsernameQuery(
-                        "select username, authority from authorities where username=?"
-                ).passwordEncoder(new BCryptPasswordEncoder());
+                .usersByUsernameQuery(usersQuery)
+                .authoritiesByUsernameQuery(authoritiesQuery).passwordEncoder(new BCryptPasswordEncoder());
 
         auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
     }

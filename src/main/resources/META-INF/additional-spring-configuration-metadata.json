@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "taco.security.users-query",
+      "type": "java.lang.String",
+      "description": "Description for taco.security.users-query."
+    },
+    {
+      "name": "taco.security.authorities-query",
+      "type": "java.lang.String",
+      "description": "Description for taco.security.authorities-query."
+    }
+  ]
+}

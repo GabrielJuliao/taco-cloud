@@ -1,6 +1,6 @@
 server:
   port: 80
-    #ssl:
+  #ssl:
   #enabled: true
   #key-store:
   #key-password:
@@ -21,17 +21,22 @@ spring:
   thymeleaf:
     cache: false
   datasource:
-   # url: jdbc:h2:mem:taco_cloud
+    # url: jdbc:h2:mem:taco_cloud
     url: jdbc:mysql://localhost:3306/taco_cloud
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
-  #sql:
-    #init:
-     #mode: always
+      #sql:
+      #init:
+      #mode: always
       #schema-locations: classpath:schema.sql
-     #data-locations: classpath:data.sql
+    #data-locations: classpath:data.sql
   jpa:
     database: h2
     open-in-view: false
     generate-ddl: false
+#custom config props...
+taco:
+  security:
+    users-query: select username, password, enabled from users where username=?
+    authorities-query: select username, authority from authorities where username=?
