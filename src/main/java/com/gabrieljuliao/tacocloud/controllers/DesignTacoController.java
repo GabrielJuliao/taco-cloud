@@ -1,20 +1,19 @@
 package com.gabrieljuliao.tacocloud.controllers;
 
-import com.gabrieljuliao.tacocloud.model.IngredientRepository;
-import com.gabrieljuliao.tacocloud.model.Order;
-import com.gabrieljuliao.tacocloud.model.Taco;
-import com.gabrieljuliao.tacocloud.model.TacoRepository;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
+import com.gabrieljuliao.tacocloud.model.*;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.Optional;
 
 
-@Controller
-@RequestMapping("/design")
-@SessionAttributes("order")
+@RestController
+@RequestMapping(value = "/design", produces = {"application/json", "text/xml"})
+//@SessionAttributes("order")
 public class DesignTacoController {
 
     private final IngredientRepository ingredientRepository;
@@ -35,30 +34,81 @@ public class DesignTacoController {
         return new Taco();
     }
 
-    @GetMapping
-    public String showDesignForm(Model model) {
-//        spring data custom jpa
-        model.addAttribute("wraps", ingredientRepository.findByType("WRAP"));
-        model.addAttribute("proteins", ingredientRepository.findByType("PROTEIN"));
-        model.addAttribute("veggies", ingredientRepository.findByType("VEGGIE"));
-        model.addAttribute("cheeses", ingredientRepository.findByType("CHEESE"));
-        model.addAttribute("sauces", ingredientRepository.findByType("SAUCE"));
-
-        return "design";
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Taco>> get(@PathVariable("id") Long id) {
+        Optional<Taco> taco = tacoRepository.findById(id);
+        if (taco.isPresent()) {
+            return new ResponseEntity<>(taco, HttpStatus.FOUND);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping
-    public String processDesign(
-            @Valid Taco design, Errors errors,
-            @ModelAttribute Order order) {
+    @GetMapping("/recent")
+    public Iterable<Taco> recentTacos() {
+        PageRequest page = PageRequest.of(
+                0, 12, Sort.by("createdAt").descending());
+        return tacoRepository.findAll(page).getContent();
+    }
 
-        if (errors.hasErrors()) {
-            return "design";
+    @GetMapping("/ingredient")
+    public Iterable<Ingredient> getIngredients() {
+        return ingredientRepository.findAll();
+    }
+
+    @PostMapping(consumes = {"application/json", "text/xml"})
+    @ResponseStatus(HttpStatus.CREATED)
+    public Taco processTaco(@RequestBody Taco taco) {
+        return tacoRepository.save(taco);
+    }
+
+    @PutMapping()
+    public Taco updateTaco(@RequestBody Taco taco) {
+        return tacoRepository.save(taco);
+    }
+
+    @DeleteMapping(consumes = {"application/json", "text/xml"})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@RequestBody Taco taco) {
+        try {
+            tacoRepository.delete(taco);
+        } catch (EmptyResultDataAccessException e) {
         }
 
-        Taco saved = tacoRepository.save(design);
-        order.addDesign(saved);
-
-        return "redirect:/orders/current";
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteById(@PathVariable("id") Long id) {
+        try {
+            tacoRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+        }
+
+    }
+
+//    @GetMapping
+//    public String showDesignForm(Model model) {
+//        model.addAttribute("wraps", ingredientRepository.findByType("WRAP"));
+//        model.addAttribute("proteins", ingredientRepository.findByType("PROTEIN"));
+//        model.addAttribute("veggies", ingredientRepository.findByType("VEGGIE"));
+//        model.addAttribute("cheeses", ingredientRepository.findByType("CHEESE"));
+//        model.addAttribute("sauces", ingredientRepository.findByType("SAUCE"));
+//
+//        return "design";
+//    }
+//
+//    @PostMapping
+//    public String processDesign(
+//            @Valid Taco design, Errors errors,
+//            @ModelAttribute Order order) {
+//
+//        if (errors.hasErrors()) {
+//            return "design";
+//        }
+//
+//        Taco saved = tacoRepository.save(design);
+//        order.addDesign(saved);
+//
+//        return "redirect:/orders/current";
+//    }
 }

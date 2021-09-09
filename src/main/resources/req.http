@@ -1,0 +1,88 @@
+GET http://localhost:8080/design/2
+Accept: application/json
+
+###
+GET http://localhost:8080/design/recent
+Accept: application/json
+
+###
+GET http://localhost:8080/design/ingredient
+Accept: application/json
+
+###
+DELETE http://localhost:8080/design/
+Content-Type: application/json
+
+{
+  "tacoId": 1,
+  "createdAt": "2021-09-09T11:04:09.462+00:00",
+  "name": "RESTful tacoYYYY",
+  "ingredients": [
+    {
+      "ingredientId": 1,
+      "name": "Flour Tortilla",
+      "type": "WRAP"
+    },
+    {
+      "ingredientId": 2,
+      "name": "Corn Tortilla",
+      "type": "WRAP"
+    },
+    {
+      "ingredientId": 3,
+      "name": "Ground Beef",
+      "type": "PROTEIN"
+    },
+    {
+      "ingredientId": 4,
+      "name": "Carnitas",
+      "type": "PROTEIN"
+    },
+    {
+      "ingredientId": 5,
+      "name": "Diced Tomatoes",
+      "type": "VEGGIE"
+    },
+    {
+      "ingredientId": 6,
+      "name": "Lettuce",
+      "type": "VEGGIE"
+    },
+    {
+      "ingredientId": 7,
+      "name": "Cheddar",
+      "type": "CHEESE"
+    },
+    {
+      "ingredientId": 8,
+      "name": "Monterrey Jack",
+      "type": "CHEESE"
+    },
+    {
+      "ingredientId": 9,
+      "name": "Salsa",
+      "type": "SAUCE"
+    },
+    {
+      "ingredientId": 10,
+      "name": "Sour Cream",
+      "type": "SAUCE"
+    }
+  ]
+}
+
+###
+POST http://localhost:8080/design/
+Content-Type: application/json
+
+{
+  "name": "RESTful tacoX2xxx",
+  "ingredients": [
+    {
+      "ingredientId": 1,
+      "name": "json"
+    }
+  ]
+}
+
+###

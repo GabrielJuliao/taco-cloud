@@ -6,11 +6,10 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,7 +19,7 @@ import java.util.Objects;
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long ingredientId;
     private String name;
     private String type;
 
@@ -30,7 +29,7 @@ public class Ingredient {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Ingredient that = (Ingredient) o;
 
-        return Objects.equals(id, that.id);
+        return Objects.equals(ingredientId, that.ingredientId);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.gabrieljuliao.tacocloud;
 
+
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -45,17 +46,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity security) throws Exception {
-        security.authorizeRequests().antMatchers("/design", "/orders")
-                .hasRole("USER").antMatchers("/", "/**")
-                .permitAll().and().formLogin()
-                .loginPage("/SignIn")
-                .loginProcessingUrl("/perform_login")
-                .defaultSuccessUrl("/design").and().logout().logoutSuccessUrl("/").and().csrf().disable();
-
-//        security.authorizeRequests().antMatchers("/", "/**").permitAll().and().formLogin()
+//        security.authorizeRequests().antMatchers("/design", "/orders")
+//                .hasRole("USER").antMatchers("/", "/**")
+//                .permitAll().and().formLogin()
 //                .loginPage("/SignIn")
 //                .loginProcessingUrl("/perform_login")
 //                .defaultSuccessUrl("/design").and().logout().logoutSuccessUrl("/").and().csrf().disable();
+
+        security.authorizeRequests().antMatchers("/", "/**").permitAll().and().formLogin()
+                .loginPage("/SignIn")
+                .loginProcessingUrl("/perform_login")
+                .defaultSuccessUrl("/design").and().logout().logoutSuccessUrl("/").and().csrf().disable();
 
         ///allow h2 console
         security.headers().frameOptions().sameOrigin();

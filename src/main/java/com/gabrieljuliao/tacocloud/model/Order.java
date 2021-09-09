@@ -23,7 +23,7 @@ import java.util.Objects;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long orderId;
     private Date placedAt;
     @NotBlank(message = "Name is Required")
     private String name;
@@ -64,7 +64,7 @@ public class Order {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Order order = (Order) o;
 
-        return Objects.equals(id, order.id);
+        return Objects.equals(orderId, order.orderId);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class Order {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
+                "id = " + orderId + ", " +
                 "placedAt = " + placedAt + ", " +
                 "name = " + name + ", " +
                 "street = " + street + ", " +

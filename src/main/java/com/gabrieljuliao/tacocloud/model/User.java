@@ -22,7 +22,7 @@ public class User implements UserDetails {
     private static long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long userId;
 
     private String username;
     private String password;
@@ -78,7 +78,7 @@ public class User implements UserDetails {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         User user = (User) o;
 
-        return Objects.equals(id, user.id);
+        return Objects.equals(userId, user.userId);
     }
 
     @Override
